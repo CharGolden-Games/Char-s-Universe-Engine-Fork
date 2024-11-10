@@ -142,7 +142,7 @@ class TitleState extends MusicBeatState
 		if (ClientPrefs.checkForUpdates && !closedState)
 		{
 			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/VideoBotYT/Universe-Engine/refs/heads/main/gitVersion.txt");
+			var http = new haxe.Http("https://raw.githubusercontent.com/CharGoldenYT/Char-s-Universe-Engine-Fork/refs/heads/VS-Char-Dev/gitVersion.txt"); // So it don't do a funny and use the incorrect file
 
 			http.onData = function(data:String)
 			{
