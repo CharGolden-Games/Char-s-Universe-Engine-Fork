@@ -1,3 +1,9 @@
+# Friday Night Funkin': VS Char
+
+I don't know what to put here yet lmao :3C=L
+
+<details>
+    <summary><h2>Universe Engine (What this mod uses) README</h2></summary>
 <h1 align="center">
   <br>
   <a href="https://github.com/VideoBotYT/Universe-Engine"><img src="assets/exclude/images/universe.png" alt="universe" width="150"></a>
