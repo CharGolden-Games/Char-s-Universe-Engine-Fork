@@ -1480,6 +1480,20 @@ class PlayState extends MusicBeatState
 		}
 
 		CustomFadeTransition.nextCamera = camOther;
+
+		var title:String;
+		switch (Paths.formatToSongPath(SONG.song.toLowerCase()).trim())
+		{
+			case 'triple-trouble':
+				title = Constants.VSCharTitles['tt_1'];
+			case 'blubber':
+				title = Constants.VSCharTitles['silly'];
+			case 'high-ground':
+				title = Constants.VSCharTitles['high-ground'];
+			default:
+				title = Constants.VSCharTitles['default'];
+		}
+		openfl.Lib.application.window.title = title;
 	}
 
 	public function changeTheSettingsBitch()
@@ -2802,6 +2816,9 @@ class PlayState extends MusicBeatState
 	{
 		switch (event.event)
 		{
+			case 'Universal Triggers':
+				UniversalTriggers.pushTrigger(SONG.song);
+
 			case 'Change Character':
 				var charType:Int = 0;
 				switch (event.value1.toLowerCase())
@@ -3780,6 +3797,13 @@ class PlayState extends MusicBeatState
 	{
 		switch (eventName)
 		{
+			case 'Universal Triggers':
+				var flValue1:Null<Float> = Std.parseFloat(value1);
+				if (!Math.isNaN(flValue1))
+					UniversalTriggers.universalTriggers(SONG.song, flValue1, value2);
+				else
+					trace('value1 is invalid!');
+
 			case 'Dadbattle Spotlight':
 				var val:Null<Int> = Std.parseInt(value1);
 				if (val == null)
@@ -5541,6 +5565,7 @@ class PlayState extends MusicBeatState
 		}
 		FlxAnimationController.globalSpeed = 1;
 		FlxG.sound.music.pitch = 1;
+		openfl.Lib.application.window.title = Constants.VSCharTitles['default'];
 		super.destroy();
 	}
 
