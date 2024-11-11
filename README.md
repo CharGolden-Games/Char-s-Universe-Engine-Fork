@@ -2,6 +2,8 @@
 
 I don't know what to put here yet lmao :3C=L
 
+VS Char is a mod all about random shit happening to ma main guy Char. He just tryna get some peace and quiet but keeps getting interrupted!
+
 <details>
     <summary><h2>Universe Engine (What this mod uses) README</h2></summary>
 <h1 align="center">
