@@ -10,74 +10,6 @@ import flixel.tweens.FlxEase;
 using StringTools;
 
 /**
- * This class handles the making and destroying of a SongTitle.
- */
-class SongTitle {
-	static var songTitle:FlxText;
-	public static var titleTimer:FlxTimer;
-	/**
-	 * Does a song title
-	 * @param song The song
-	 * @param author The person/people who made it
-	 * @param fontColor The font color if you want to overrwrite it.
-	 * @param outlineColor The outline color if you want to overwrite it.
-	 * @param title If you want the Title to be something other then the song name, change this.
-	 * @param font If you wanna specify a font, use this
-	 * @param destroy If you want to do something other then a simple fade out, set this to false.
-	 */
-	public static function doSongTitle(song:String, author:String, ?fontColor:FlxColor, ?outlineColor:FlxColor, ?title:String, ?font:String, ?destroy:Bool = true)
-	{
-		var result = PlayState.instance.callOnLuas('doSongTitle', [song, author, fontColor, outlineColor, title, font, destroy]);
-		if (result != FunkinLua.Function_Continue)
-			return;
-
-		if (titleTimer != null)
-			titleTimer.cancel();
-
-		if (title == null)
-			title = song;
-
-		var finalTitle:String = title + '\n';
-
-		for(i in 0...title.length+2) {
-			finalTitle += '-';
-		}
-
-		if (fontColor == null) {
-			fontColor = 0xFFCE5200;
-		}
-		if (outlineColor == null) {
-			outlineColor = 0xFFFF9100;
-		}
-
-		if (font == null)
-			font = Paths.font('vcr.ttf');
-		
-		finalTitle += '\n' + author;
-		songTitle = new FlxText(FlxG.width * 0.17, FlxG.height * 0.4, 0, finalTitle, 50);
-		songTitle.setFormat(font, 50, fontColor, CENTER, OUTLINE, outlineColor);
-		songTitle.borderSize = 4;
-		songTitle.cameras = [PlayState.instance.camOther];
-		songTitle.scrollFactor.set();
-		songTitle.alpha = 0;
-		PlayState.instance.add(songTitle);
-		FlxTween.tween(songTitle, {alpha: 1}, 0.5, {ease: FlxEase.quadIn});
-		titleTimer = new FlxTimer().start(3, function(tmr:FlxTimer) {
-			if (destroy)
-				destroyTitle();
-		});
-	}
-
-	public static function destroyTitle() {
-		if (songTitle != null)
-			FlxTween.tween(songTitle, {alpha: 0}, 0.5, {ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){
-				songTitle.destroy();
-			}});
-	}
-
-}
-
-/**
  * This class handles the "Universal Triggers" event so it doesn't clutter PlayState.
  */
 class UniversalTriggers {
@@ -86,18 +18,21 @@ class UniversalTriggers {
     static var bf:Int = 0;
 
     static var ttChars_bf:Array<String> = [
-        'char-tt',
+        'char',
         'plexi-ttBehind',
         'char-ttBehind',
-        'char-ttReverse'
+        'char-ttBehindReverse',
+        'char-tt'
     ];
 
     static var ttChars_dad:Array<String> = [
+        'mFront', // The Micheal BEFORE any other phases.
         'micheal-ttFront',
         'ctrevor-tt',
         'ftrevor-tt',
         'cplexi-tt',
         'fplexi-tt',
+        'zavi-tt',
         'micheal-pissy-ttFront'
     ];
 
@@ -111,8 +46,12 @@ class UniversalTriggers {
         for (char in list)
             PlayState.instance.addCharacterToList(char, type);
     }
+
     public static function pushTrigger(song:String)
     {
+        PlayState.instance.addCharacterToList('none', bf);
+        PlayState.instance.addCharacterToList('none', gf);
+        PlayState.instance.addCharacterToList('none', dad);
         switch (songNameToTrigger(song))
         {
             case 'Triggers High Ground':
@@ -135,6 +74,7 @@ class UniversalTriggers {
         PlayState.instance.callOnLuas('pushTrigger', [songNameToTrigger(song)]);
     }
 
+    public static var alphaTween:FlxTween;
     public static function universalTriggers(song:String, trigger:Float, trigger2:Dynamic)
     {
         var flTrigger2:Null<Float> = Std.parseFloat(trigger2);
@@ -145,10 +85,56 @@ class UniversalTriggers {
             case 'Triggers Triple Trouble':
                 switch (trigger) {
                     case 0:
+                        IconManagement.set_IconP4('plexi', true);
                         SongTitle.doSongTitle(song, 'MarStarBro' /**Likely to change**/, 0xFF44009C, 0xFF00063A, 'Triple Trouble (Char Cover)');
+
+                    case 1:
+                        IconManagement.hide_IconP4(true);
+                        PlayState.instance.doWhiteFlash();
+                        PlayState.instance.triggerEventNote('Change Character', 'mFront', 'dad');
+                        PlayState.instance.triggerEventNote('Change Character', 'plexi-ttBehind', 'bf');
+                        PlayState.instance.triggerEventNote('Change Character', 'none', 'gf');
+
+                    case 2:
+                        // PlayState.instance.flipHealthbar = true;
+                        PlayState.instance.doWhiteFlash();
+                        PlayState.instance.triggerEventNote('Change Character', 'ctrevor-tt', 'dad');
+                        PlayState.instance.triggerEventNote('Change Character', 'char-tt', 'bf');
+                        PlayState.instance.boyfriend.flipX = false;
+
+                    case 3:
+                        PlayState.instance.triggerEventNote('Change Character', 'ftrevor-tt', 'dad');
+
+                    case 4:
+                        PlayState.instance.triggerEventNote('Change Character', 'micheal-ttFront', 'dad');
+                        PlayState.instance.triggerEventNote('Change Character', 'char-ttBehindReverse', 'bf');
+
+                    case 5:
+                        // PlayState.instance.flipHealthbar = false;
+                        PlayState.instance.doWhiteFlash();
+                        PlayState.instance.triggerEventNote('Change Character', 'cplexi-tt', 'dad');
+                        PlayState.instance.triggerEventNote('Change Character', 'char', 'bf');
+
+                    case 6:
+                        PlayState.instance.triggerEventNote('Change Character', 'fplexi-tt', 'dad');
+
+                    case 7:
+                        IconManagement.set_IconP4('fPlexi', true);
+                        PlayState.instance.doWhiteFlash();
+                        PlayState.instance.triggerEventNote('Change Character', 'micheal-pissy-ttFront', 'dad');
+                        PlayState.instance.triggerEventNote('Change Character', 'char-ttBehind', 'bf');
+
+                    case 8:
+                        IconManagement.hide_IconP4(true);
+                        alphaTween = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 4, {ease: FlxEase.quadOut});
+
+                    case 9:
+                        PlayState.instance.doWhiteFlash();
+                        PlayState.instance.triggerEventNote('Change Character', 'zavi-tt', 'dad');
 
                     case 10:
                         openfl.Lib.application.window.title = Constants.VSCharTitles['tt_2'];
+
                     case 11:
                         openfl.Lib.application.window.title = Constants.VSCharTitles['tt_3'];
                 }

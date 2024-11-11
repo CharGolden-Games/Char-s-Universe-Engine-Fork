@@ -1,0 +1,50 @@
+{
+	"songs": [
+		[
+			"saloon-troubles",
+			"sear",
+			[
+				215,
+				173,
+				255
+			]
+		],
+		[
+			"conflicting-views",
+			"igni",
+			[
+				60,
+				60,
+				100
+			]
+		],
+		[
+			"ambush",
+			"cIgni",
+			[
+				140,
+				140,
+				180
+			]
+		]
+	],
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"difficulties": "",
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"storyName": "Saloon Troubles",
+	"weekName": "Saloon Troubles",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"hideStoryMode": true,
+	"weekBefore": "tutorial",
+	"startUnlocked": true
+}

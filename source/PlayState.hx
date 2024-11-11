@@ -230,6 +230,8 @@ class PlayState extends MusicBeatState
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
+	public var iconP3:HealthIcon;
+	public var iconP4:HealthIcon;
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
@@ -350,6 +352,7 @@ class PlayState extends MusicBeatState
 	public static var lastScore:Array<FlxSprite> = [];
 
 	public static var playerIsCheating:Bool = false;
+	var white:FlxSprite;
 
 	override public function create()
 	{
@@ -1212,6 +1215,18 @@ class PlayState extends MusicBeatState
 			add(healthBarBG);
 		}
 
+		iconP3 = new HealthIcon(boyfriend.healthIcon, true);
+		iconP3.y = healthBar.y - 110;
+		iconP3.visible = false;
+		iconP3.alpha = ClientPrefs.healthBarAlpha;
+		add(iconP3);
+
+		iconP4 = new HealthIcon(dad.healthIcon, false);
+		iconP4.y = healthBar.y - 110;
+		iconP4.visible = false;
+		iconP4.alpha = ClientPrefs.healthBarAlpha;
+		add(iconP4);
+
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
 		iconP1.visible = !ClientPrefs.hideHud;
@@ -1243,6 +1258,12 @@ class PlayState extends MusicBeatState
 			botplayTxt.y = timeBarBG.y - 78;
 		}
 
+		
+		white = new FlxSprite().makeGraphic(FlxG.width * 5, FlxG.height * 5, 0xFFFFFFFF);
+		white.scrollFactor.set(0, 0);
+		white.alpha = 0.000001;
+		add(white);
+
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -1250,6 +1271,8 @@ class PlayState extends MusicBeatState
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
+		iconP3.cameras = [camHUD];
+		iconP4.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		timeBar.cameras = [camHUD];
@@ -1459,6 +1482,7 @@ class PlayState extends MusicBeatState
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
 		ModchartFuncs.loadLuaFunctions();
+		doTitleChange();
 		callOnLuas('onCreatePost', []);
 
 		super.create();
@@ -1480,9 +1504,18 @@ class PlayState extends MusicBeatState
 		}
 
 		CustomFadeTransition.nextCamera = camOther;
-
+		if (ClientPrefs.ht.toLowerCase() == 'fire in the hole')
+		{
+			if (!Constants.forceWindowTitle.contains(Paths.formatToSongPath(SONG.song.toLowerCase()).trim()))
+				openfl.Lib.application.window.title = Constants.VSCharTitles['FIRE IN THE HOLE'];
+		}
+	}
+	
+	function doTitleChange(overrideTitle:String = '')
+	{
 		var title:String;
-		switch (Paths.formatToSongPath(SONG.song.toLowerCase()).trim())
+		var formattedSong:String = Paths.formatToSongPath(SONG.song.toLowerCase()).trim();
+		switch (formattedSong)
 		{
 			case 'triple-trouble':
 				title = Constants.VSCharTitles['tt_1'];
@@ -1490,10 +1523,49 @@ class PlayState extends MusicBeatState
 				title = Constants.VSCharTitles['silly'];
 			case 'high-ground':
 				title = Constants.VSCharTitles['high-ground'];
+			case 'saloon-troubles':
+				title = Constants.VSCharTitles['saloon_1'];
+				iconP3.visible = true;
+				iconP3.changeIcon('sear');
+			case 'conflicting-views':
+				title = Constants.VSCharTitles['saloon_2'];
+			case 'ambush': 
+				title = Constants.VSCharTitles['saloon_3'];
+				iconP3.visible = true;
+				iconP4.visible = true;
+				iconP3.changeIcon('sear');
+				iconP4.changeIcon('cIgni');
+			case 'neighborhood-brawl':
+				title = Constants.VSCharTitles['bnnuy'];
 			default:
 				title = Constants.VSCharTitles['default'];
 		}
+		if (Constants.legacySongNames.contains(formattedSong))
+		{
+			title = Constants.VSCharTitles['legacy'];
+		}
+		var result:Dynamic = callOnLuas('doTitleChange', [], true, [FunkinLua.Function_Continue]);
+		if (Std.isOfType(result, String))
+		{
+			var title2 = Std.string(result);
+		}
+		trace(result);
 		openfl.Lib.application.window.title = title;
+	}
+
+	var flashTween:FlxTween;
+	public function doWhiteFlash()
+	{
+		if (flashTween != null)
+		{
+			flashTween.cancel();
+		}
+		white.visible = true;
+		white.alpha = 1;
+		if (ClientPrefs.flashing)
+		{
+			flashTween = FlxTween.tween(white, {alpha: 0.00001}, 2, {ease: FlxEase.quadOut});
+		}
 	}
 
 	public function changeTheSettingsBitch()
@@ -3012,6 +3084,15 @@ class PlayState extends MusicBeatState
 			{
 				timer.active = false;
 			}
+
+			if (UniversalTriggers.alphaTween != null && !UniversalTriggers.alphaTween.finished)
+			{
+				UniversalTriggers.alphaTween.active = false;
+			}
+			if (flashTween != null && !flashTween.finished)
+			{
+				flashTween.active = false;
+			}
 		}
 
 		super.openSubState(SubState);
@@ -3052,6 +3133,15 @@ class PlayState extends MusicBeatState
 			for (timer in modchartTimers)
 			{
 				timer.active = true;
+			}
+
+			if (UniversalTriggers.alphaTween != null && !UniversalTriggers.alphaTween.finished)
+			{
+				UniversalTriggers.alphaTween.active = true;
+			}
+			if (flashTween != null && !flashTween.finished)
+			{
+				flashTween.active = true;
 			}
 			paused = false;
 			callOnLuas('onResume', []);
@@ -3359,6 +3449,14 @@ class PlayState extends MusicBeatState
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
 
+		var mult:Float = FlxMath.lerp(1, iconP3.scale.x, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+		iconP3.scale.set(mult, mult);
+		iconP3.updateHitbox();
+
+		var mult:Float = FlxMath.lerp(1, iconP4.scale.x, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+		iconP4.scale.set(mult, mult);
+		iconP4.updateHitbox();
+
 		var iconOffset:Int = 26;
 
 		iconP1.x = healthBar.x
@@ -3368,20 +3466,44 @@ class PlayState extends MusicBeatState
 		iconP2.x = healthBar.x
 			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
 			- (150 * iconP2.scale.x) / 2
-			- iconOffset * 2;
+			+ iconOffset * 2;
+		iconP3.x = healthBar.x
+			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
+			- (150 * iconP3.scale.x - 150) / 2
+			+ iconOffset * 1.5;
+		iconP4.x = healthBar.x
+			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
+			- (150 * iconP4.scale.x) / 2
+			- iconOffset * 4;
 
 		if (health > 2)
 			health = 2;
 
 		if (healthBar.percent < 20)
+		{
 			iconP1.animation.curAnim.curFrame = 1;
+			iconP3.animation.curAnim.curFrame = 1;
+			if (iconP2.animation.curAnim.numFrames >= 3)
+				iconP2.animation.curAnim.curFrame = 2;
+		}
 		else
+		{
 			iconP1.animation.curAnim.curFrame = 0;
+			iconP3.animation.curAnim.curFrame = 0;
+		}
 
 		if (healthBar.percent > 80)
+		{
 			iconP2.animation.curAnim.curFrame = 1;
+			iconP4.animation.curAnim.curFrame = 1;
+			if (iconP1.animation.curAnim.numFrames >= 3)
+				iconP1.animation.curAnim.curFrame = 2;
+		}
 		else
+		{
 			iconP2.animation.curAnim.curFrame = 0;
+			iconP4.animation.curAnim.curFrame = 0;
+		}
 
 		if (FlxG.keys.anyJustPressed(debugKeysCharacter) && !endingSong && !inCutscene)
 		{
@@ -5202,7 +5324,7 @@ class PlayState extends MusicBeatState
 			if (cpuControlled && (note.ignoreNote || note.hitCausesMiss))
 				return;
 
-			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
+			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled && ClientPrefs.ht != "Baldi")
 			{
 				FlxG.sound.play(Paths.sound("hitsound-" + ClientPrefs.ht), ClientPrefs.hitsoundVolume);
 			}
@@ -5620,9 +5742,13 @@ class PlayState extends MusicBeatState
 
 		iconP1.scale.set(1.2, 1.2);
 		iconP2.scale.set(1.2, 1.2);
+		iconP3.scale.set(1.2, 1.2);
+		iconP4.scale.set(1.2, 1.2);
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+		iconP3.updateHitbox();
+		iconP4.updateHitbox();
 
 		if (gf != null
 			&& curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0

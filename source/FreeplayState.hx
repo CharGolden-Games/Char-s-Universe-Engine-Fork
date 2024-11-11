@@ -457,7 +457,15 @@ class FreeplayState extends MusicBeatState
 			}*/
 			trace(poop);
 
-			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+			try
+				{
+					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+				}
+				catch(e:Dynamic)
+				{
+					lime.app.Application.current.window.alert('Error loading song!\n$e');
+					return;
+				}
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 
