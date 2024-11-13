@@ -35,6 +35,7 @@ class Constants {
     ];
 
     public static final legacySongNames:Array<String> = [
+        'defeat-char-mix',
         'high-ground-old',
         'free-movies-free',
         '3-problems',

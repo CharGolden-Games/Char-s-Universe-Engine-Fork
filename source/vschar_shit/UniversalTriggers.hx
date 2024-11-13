@@ -214,12 +214,12 @@ class UniversalTriggers {
                     return 'Triggers Junkyard Zavi Mix';
                 case 'defeat-odd-mix':
                     return 'Triggers Defeat ODDBLUE Mix';
-                case 'defeat-char-mix':
-                    return 'Triggers Defeat Char Mix';
                 case 'shenanigans':
                     return 'Triggers Shenanigans Char Mix';
     
                 // Old Songs
+                case 'defeat-char-mix':
+                    return 'Triggers Defeat Char Mix';
                 case 'high-ground-old':
                     return 'Triggers High Ground Legacy';
                 case 'free-movies-free':
