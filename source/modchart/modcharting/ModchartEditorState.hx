@@ -392,6 +392,7 @@ class ModchartEditorState extends #if SCEModchartingTools states.MusicBeatState 
 
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
+	public var camDesc:FlxCamera; // Used for the help screen
 	public var notes:FlxTypedGroup<Note>;
 
 	private var strumLine:FlxSprite;
@@ -453,6 +454,8 @@ class ModchartEditorState extends #if SCEModchartingTools states.MusicBeatState 
 		super();
 	}
 
+	public var help_bg:FlxSprite;
+	public var helpText:FlxText;
 	override public function create()
 	{
 		// SCE Ed's and mine's engine already fixes this without this code.
@@ -473,10 +476,25 @@ class ModchartEditorState extends #if SCEModchartingTools states.MusicBeatState 
 		#else
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
+		camDesc = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
+		camDesc.bgColor.alpha = 0;
+		camDesc.visible = false;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camDesc, false);
+
+		help_bg = new FlxSprite().makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+		help_bg.cameras = [camDesc];
+		help_bg.alpha = 0.6;
+		add(help_bg);
+		// NOTE: PLEASE MAKE SURE TO ADD A FULL DESCRIPTION HERE. I don't know how this editor works.
+		helpText = new FlxText(0, 0, FlxG.width, 'Click to add an event\nBackspace to remove an event', 30);
+		helpText.setFormat(Paths.font('funkin.ttf'), 30, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
+		helpText.screenCenter(Y);
+		helpText.cameras = [camDesc];
+		add(helpText);
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		#end
@@ -695,6 +713,13 @@ class ModchartEditorState extends #if SCEModchartingTools states.MusicBeatState 
 		hideUI.y -= hideUI.height;
 		hideUI.x -= hideUI.width;
 		add(hideUI);
+
+		var textToAdd:FlxText = new FlxText(0, 0, 0, 'Press F2 to view controls', 20);
+		textToAdd.x = FlxG.width - (textToAdd.width + 30); // Offset to stay within the edge of the box
+		textToAdd.setFormat(Paths.font('funkin.ttf'), 20, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
+		textToAdd.cameras = [camHUD];
+		textToAdd.y = FlxG.height - (textToAdd.height + 15);
+		add(textToAdd);
 	}
 
 	#if (!SCEModchartingTools && (PSYCH && PSYCHVERSION >= "0.7.1"))
@@ -785,6 +810,11 @@ class ModchartEditorState extends #if SCEModchartingTools states.MusicBeatState 
 		for (i in scrollBlockers)
 			if (i.dropPanel.visible)
 				blockInput = true;
+
+		if (FlxG.keys.justPressed.F2)
+		{
+			camDesc.visible = !camDesc.visible;
+		}
 
 		if (!blockInput)
 		{

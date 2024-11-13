@@ -49,6 +49,8 @@ class SelectThing extends MusicBeatState
 
 	var selectorLeft:Alphabet;
 	var selectorRight:Alphabet;
+	public static var isPlayState:Bool = false;
+	var music:FlxSound;
 
 	override function create()
 	{
@@ -110,6 +112,17 @@ class SelectThing extends MusicBeatState
 
 		changeSelection();
 		ClientPrefs.saveSettings();
+		music = new FlxSound();
+		if (!isPlayState)
+		{
+			FlxG.sound.playMusic(Paths.music("freakyMenu-" + ClientPrefs.mmm));
+			FlxG.sound.music.volume = 0.8;
+		}
+		else
+		{
+			music.loadEmbedded(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic))).play();
+			FlxG.sound.list.add(music);
+		}
 
 		super.create();
 	}

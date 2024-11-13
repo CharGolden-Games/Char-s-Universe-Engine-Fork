@@ -36,15 +36,20 @@ class UniversalTriggers {
         'micheal-pissy-ttFront'
     ];
 
-    /**
-     * Useful if you have a LOT of characters to add.
-     * @param list The list of characters
-     * @param type The type to add ("bf", "dad", or "gf")
-     */
-    public static function bulk_addCharacter(list:Array<String>, type:Int)
+    public static function bulk_addCharacters(?bfList:Array<String>, ?gfList:Array<String>, ?dadList:Array<String>)
     {
-        for (char in list)
-            PlayState.instance.addCharacterToList(char, type);
+        if (bfList != null)
+        {
+            PlayState.instance.bulk_addCharacter(dadList, 'bf');
+        }
+        if (gfList != null)
+        {
+            PlayState.instance.bulk_addCharacter(dadList, 'gf');
+        }
+        if (dadList != null)
+        {
+            PlayState.instance.bulk_addCharacter(dadList, 'dad');
+        }
     }
 
     public static function pushTrigger(song:String)
@@ -59,8 +64,7 @@ class UniversalTriggers {
                 PlayState.instance.addCharacterToList('char-remix-opponent', dad);
             
             case 'Triggers Triple Trouble':
-                bulk_addCharacter(ttChars_bf, bf);
-                bulk_addCharacter(ttChars_dad, dad);
+                bulk_addCharacters(ttChars_bf, null, ttChars_dad);
 
             case 'Triggers Saloon Trouble':
                 PlayState.instance.addCharacterToList('sear', gf);
@@ -74,7 +78,37 @@ class UniversalTriggers {
         PlayState.instance.callOnLuas('pushTrigger', [songNameToTrigger(song)]);
     }
 
+    /**
+     * Allows you to change multiple characters at once.
+     */
+    static function changeCharacters(?bf:String, ?gf:String, ?dad:String)
+    {
+        if (bf != null)
+        {
+            PlayState.instance.triggerEventNote('Change Character', 'bf', bf);
+        }
+        if (gf != null)
+        {
+            PlayState.instance.triggerEventNote('Change Character', 'gf', gf);
+        }
+        if (dad != null)
+        {
+            PlayState.instance.triggerEventNote('Change Character', 'dad', dad);
+        }
+    }
+
+    public static function moveCharacters()
+    {
+        // Move them to their correct positions.
+        PlayState.instance.boyfriend.x = dadPos[0];
+        PlayState.instance.boyfriend.y = dadPos[1];
+        PlayState.instance.dad.x = bfPos[0];
+        PlayState.instance.dad.y = bfPos[1];
+    }
+
     public static var alphaTween:FlxTween;
+    public static var bfPos:Array<Float> = [0, 0];
+    public static var dadPos:Array<Float> = [0, 0];
     public static function universalTriggers(song:String, trigger:Float, trigger2:Dynamic)
     {
         var flTrigger2:Null<Float> = Std.parseFloat(trigger2);
@@ -89,40 +123,40 @@ class UniversalTriggers {
                         SongTitle.doSongTitle(song, 'MarStarBro' /**Likely to change**/, 0xFF44009C, 0xFF00063A, 'Triple Trouble (Char Cover)');
 
                     case 1:
-                        IconManagement.hide_IconP4(true);
                         PlayState.instance.doWhiteFlash();
-                        PlayState.instance.triggerEventNote('Change Character', 'mFront', 'dad');
-                        PlayState.instance.triggerEventNote('Change Character', 'plexi-ttBehind', 'bf');
-                        PlayState.instance.triggerEventNote('Change Character', 'none', 'gf');
+                        changeCharacters('plexi-ttBehind', 'none', 'mFront');
+                        moveCharacters();
+                        IconManagement.set_IconP4('fchar', true);
 
                     case 2:
                         // PlayState.instance.flipHealthbar = true;
+                        IconManagement.hide_IconP4(true);
                         PlayState.instance.doWhiteFlash();
-                        PlayState.instance.triggerEventNote('Change Character', 'ctrevor-tt', 'dad');
-                        PlayState.instance.triggerEventNote('Change Character', 'char-tt', 'bf');
-                        PlayState.instance.boyfriend.flipX = false;
+                        changeCharacters('char-tt', null, 'ctrevor-tt');
+                        moveCharacters();
 
                     case 3:
-                        PlayState.instance.triggerEventNote('Change Character', 'ftrevor-tt', 'dad');
+                        changeCharacters(null, null, 'ftrevor-tt');
+                        moveCharacters();
 
                     case 4:
-                        PlayState.instance.triggerEventNote('Change Character', 'micheal-ttFront', 'dad');
-                        PlayState.instance.triggerEventNote('Change Character', 'char-ttBehindReverse', 'bf');
+                        changeCharacters('char-ttBehind', null, 'micheal-ttFront');
+                        moveCharacters();
+                        IconManagement.set_IconP4('tt-duo', true);
 
                     case 5:
                         // PlayState.instance.flipHealthbar = false;
                         PlayState.instance.doWhiteFlash();
-                        PlayState.instance.triggerEventNote('Change Character', 'cplexi-tt', 'dad');
-                        PlayState.instance.triggerEventNote('Change Character', 'char', 'bf');
+                        IconManagement.hide_IconP4(true);
+                        changeCharacters('char', null, 'cplexi-tt');
 
                     case 6:
-                        PlayState.instance.triggerEventNote('Change Character', 'fplexi-tt', 'dad');
+                        changeCharacters(null, null, 'fplexi-tt');
 
                     case 7:
-                        IconManagement.set_IconP4('fPlexi', true);
                         PlayState.instance.doWhiteFlash();
-                        PlayState.instance.triggerEventNote('Change Character', 'micheal-pissy-ttFront', 'dad');
-                        PlayState.instance.triggerEventNote('Change Character', 'char-ttBehind', 'bf');
+                        changeCharacters('char-ttBehindReverse', null, 'micheal-pissy-ttFront');
+                        IconManagement.set_IconP4('tripleTrouble'/**hah, hah! He said it!**/, true);
 
                     case 8:
                         IconManagement.hide_IconP4(true);
@@ -130,13 +164,22 @@ class UniversalTriggers {
 
                     case 9:
                         PlayState.instance.doWhiteFlash();
-                        PlayState.instance.triggerEventNote('Change Character', 'zavi-tt', 'dad');
+                        IconManagement.set_IconP4('cplexi', true);
+                        changeCharacters(null, null, 'zavi-tt');
 
                     case 10:
                         openfl.Lib.application.window.title = Constants.VSCharTitles['tt_2'];
 
                     case 11:
                         openfl.Lib.application.window.title = Constants.VSCharTitles['tt_3'];
+                }
+
+            case 'Triggers Rivulet':
+                switch (trigger)
+                {
+                    case 0:
+                        SongTitle.doSongTitle(song, 'Gamesdarks12' /**Likely to change**/, 0xFF60DAFF, 0xFF0084FF, 'Rivulet');
+                        openfl.Lib.application.window.title = Constants.VSCharTitles['silly'];
                 }
         }
 
@@ -173,6 +216,8 @@ class UniversalTriggers {
                     return 'Triggers Defeat ODDBLUE Mix';
                 case 'defeat-char-mix':
                     return 'Triggers Defeat Char Mix';
+                case 'shenanigans':
+                    return 'Triggers Shenanigans Char Mix';
     
                 // Old Songs
                 case 'high-ground-old':
@@ -181,13 +226,13 @@ class UniversalTriggers {
                     return 'Triggers Wega';
                 case '3-problems':
                     return 'Triggers Triple Trouble Cover Old';
-                case 'slow':
+                case 'not-fast':
                     return 'Triggers Too Slow Cover';
                 case 'you-can-walk':
                     return "Triggers You Can't Run Cover";
                 case 'vesania':
                     return 'Triggers Vesania Cover';
-                case 'shenanigans':
+                case 'shenanigans-old':
                     return 'Triggers Shenanigans';
             }
             var result = PlayState.instance.callOnLuas('songNameToTrigger', [Paths.formatToSongPath(songName.toLowerCase()).trim()], false, [FunkinLua.Function_Continue]);

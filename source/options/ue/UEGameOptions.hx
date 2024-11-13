@@ -37,14 +37,15 @@ class UEGameOptions extends BaseOptionsMenu
 			'Universe',
 			'FunkinParadise',
 			"AAC V4",
-			'VS Impostor V4',
-			'VS Shaggy',
-			'VS Nonsense V2',
-			'DNB Old',
-			'Stay Funky',
+			'VS Impostor V4', // Reminder to remove this.
+			'VS Shaggy', // Reminder to remove this.
+			'VS Nonsense V2', // Reminder to remove this.
+			'DNB Old', // Reminder to remove this.
+			'Stay Funky', // Reminder to remove this.
 			'Marked Engine'
 		]);
 		addOption(option);
+		option.onChange = onChangeMenuMusic;
 
 		var option:Option = new Option('Fancy Title', 'Title bounce', 'ft', 'bool', false);
 		addOption(option);
@@ -82,6 +83,14 @@ class UEGameOptions extends BaseOptionsMenu
 			FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic)));
 
 		changedMusic = true;
+	}
+
+	function onChangeMenuMusic()
+	{
+		if (!SelectThing.isPlayState)
+		{
+			FlxG.sound.playMusic(Paths.music("freakyMenu-" + ClientPrefs.mmm));
+		}
 	}
 
 	override function destroy()

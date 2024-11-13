@@ -1,5 +1,6 @@
 package;
 
+import ue.CheckForInvalidSettings;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -241,6 +242,7 @@ class TitleState extends MusicBeatState
 			}
 			#end
 
+			CheckForInvalidSettings.checkSettings();
 			if (initialized)
 				startIntro();
 			else

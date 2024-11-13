@@ -20,6 +20,7 @@ class IconManagement
 
         if (iconP3 != null)
         {
+            trace('$char');
             iconP3.changeIcon(char);
             iconP3.visible = visible;
         }
@@ -63,6 +64,7 @@ class IconManagement
 
         if (iconP4 != null)
         {
+            trace('$char');
             iconP4.changeIcon(char);
             iconP4.visible = visible;
         }

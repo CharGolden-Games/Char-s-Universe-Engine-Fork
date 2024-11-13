@@ -38,7 +38,7 @@ class Constants {
         'high-ground-old',
         'free-movies-free',
         '3-problems',
-        'slow',
+        'not-fast',
         'you-can-walk',
         'vesania',
         'shenanigans'

@@ -353,6 +353,7 @@ class PlayState extends MusicBeatState
 
 	public static var playerIsCheating:Bool = false;
 	var white:FlxSprite;
+	var vsCharSongs_forceOffPlayfields:Array<String> = [];
 
 	override public function create()
 	{
@@ -1153,7 +1154,7 @@ class PlayState extends MusicBeatState
 		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
 		// add(strumLine);
 
-		if (ClientPrefs.gameplaySettings.get('modchart') == true)
+		if (ClientPrefs.gameplaySettings.get('modchart') == true && !vsCharSongs_forceOffPlayfields.contains(Paths.formatToSongPath(SONG.song)))
 		{
 			playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
 			playfieldRenderer.cameras = [camHUD];
@@ -1486,6 +1487,8 @@ class PlayState extends MusicBeatState
 		callOnLuas('onCreatePost', []);
 
 		super.create();
+		UniversalTriggers.bfPos = [boyfriend.x, boyfriend.y];
+		UniversalTriggers.dadPos = [dad.x, dad.y];
 
 		cacheCountdown();
 		cachePopUpScore();
@@ -3914,6 +3917,40 @@ class PlayState extends MusicBeatState
 		// trace('Control result: ' + pressed);
 		return pressed;
 	}
+
+    /**
+     * Useful if you have a LOT of characters to add.
+     * @param list The list of characters
+     * @param type The type to add ("bf", "dad", or "gf")
+     */
+	 public function bulk_addCharacter(list:Array<String>, type:String = 'bf')
+		{
+			for (char in list)
+			{
+				trace('Adding $char to characterList');
+				if (type == 'bf')
+				{
+					if (!boyfriendMap.exists(char))
+					{
+						addCharacterToList(char, 0);
+					}
+				}
+				if (type == 'gf')
+				{
+					if (!boyfriendMap.exists(char))
+					{
+						addCharacterToList(char, 2);
+					}
+				}
+				if (type == 'dad')
+				{
+					if (!boyfriendMap.exists(char))
+					{
+						addCharacterToList(char, 1);
+					}
+				}
+			}
+		}
 
 	public function triggerEventNote(eventName:String, value1:String, value2:String)
 	{
