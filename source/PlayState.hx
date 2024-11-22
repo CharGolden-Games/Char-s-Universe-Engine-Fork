@@ -143,6 +143,7 @@ class PlayState extends MusicBeatState
 	public var gfGroup:FlxSpriteGroup;
 
 	public static var curStage:String = '';
+	public var currentStage:BaseStage;
 	public static var isPixelStage:Bool = false;
 	public static var SONG:SwagSong = null;
 	public static var isStoryMode:Bool = false;
@@ -342,7 +343,7 @@ class PlayState extends MusicBeatState
 	private var keysArray:Array<Dynamic>;
 	private var controlArray:Array<String>;
 
-	var precacheList:Map<String, String> = new Map<String, String>();
+	public var precacheList:Map<String, String> = new Map<String, String>();
 
 	// stores the last judgement object
 	public static var lastRating:FlxSprite;
@@ -489,25 +490,6 @@ class PlayState extends MusicBeatState
 		SONG.stage = curStage;
 
 		var stageData:StageFile = StageData.getStageFile(curStage);
-		if (stageData == null)
-		{ // Stage couldn't be found, create a dummy stage for preventing a crash
-			stageData = {
-				directory: "",
-				defaultZoom: 0.9,
-				isPixelStage: false,
-				stageUI: "normal",
-
-				boyfriend: [770, 100],
-				girlfriend: [400, 130],
-				opponent: [100, 100],
-				hide_girlfriend: false,
-
-				camera_boyfriend: [0, 0],
-				camera_opponent: [0, 0],
-				camera_girlfriend: [0, 0],
-				camera_speed: 1
-			};
-		}
 
 		stageUI = "normal";
 		if (stageData.stageUI != null && stageData.stageUI.trim().length > 0)
@@ -887,7 +869,26 @@ class PlayState extends MusicBeatState
 				foregroundSprites.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
 				if (!ClientPrefs.lowQuality)
 					foregroundSprites.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
+
+			case 'chartt':	new CharTT(); 
+			case 'saloon': new Saloon();
+			case 'saloon-closeup': new Saloon2();
+			case 'train': new Train();
+			case 'igni-office': new Office();
+			case 'char-house': new CharsHouse();
+			case 'silly-stage': new SillyStage();
+			// Old Song Stages
+			case 'chartt-old': new CharTT_Old();
+			case 'orangisland': new OrangIsland();
+			case 'burntisland': new BurntIsland();
+			case 'hellstadium': new HellStadium();
+			case 'shenanigans-stage': new Stage();
+			case 'mansion': new Mansion();
 		}
+
+		if (currentStage == null)
+			currentStage = new BaseStage();
+
 
 		switch (Paths.formatToSongPath(SONG.song))
 		{
@@ -1263,6 +1264,7 @@ class PlayState extends MusicBeatState
 		white = new FlxSprite().makeGraphic(FlxG.width * 5, FlxG.height * 5, 0xFFFFFFFF);
 		white.scrollFactor.set(0, 0);
 		white.alpha = 0.000001;
+		white.screenCenter();
 		add(white);
 
 		strumLineNotes.cameras = [camHUD];
@@ -1280,6 +1282,7 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+		white.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -1457,6 +1460,21 @@ class PlayState extends MusicBeatState
 		// PRECACHING MISS SOUNDS BECAUSE I THINK THEY CAN LAG PEOPLE AND FUCK THEM UP IDK HOW HAXE WORKS
 		if (ClientPrefs.hitsoundVolume > 0)
 			precacheList.set('hitsound-${ClientPrefs.ht}', 'sound');
+		if (ClientPrefs.ht.toLowerCase() == 'baldi')
+		{
+			// I have a feeling a script causes unnessaccary lag without this.
+			var baldiSounds:Array<String> = [
+				'baldi/oh',
+				'baldi/hi',
+				'baldi/welcome',
+				'baldi/to',
+				'baldi/my',
+				'baldi/school',
+				'baldi/house'
+			];
+			for (sound in baldiSounds)
+				precacheList.set(sound, 'sound');
+		}
 		precacheList.set('missnote1', 'sound');
 		precacheList.set('missnote2', 'sound');
 		precacheList.set('missnote3', 'sound');
@@ -1484,6 +1502,7 @@ class PlayState extends MusicBeatState
 		}
 		ModchartFuncs.loadLuaFunctions();
 		doTitleChange();
+		currentStage.createPost();
 		callOnLuas('onCreatePost', []);
 
 		super.create();
@@ -1510,50 +1529,39 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.ht.toLowerCase() == 'fire in the hole')
 		{
 			if (!Constants.forceWindowTitle.contains(Paths.formatToSongPath(SONG.song.toLowerCase()).trim()))
-				openfl.Lib.application.window.title = Constants.VSCharTitles['FIRE IN THE HOLE'];
+				openfl.Lib.application.window.title = VSCharTitles.get('FIRE IN THE HOLE');
 		}
 	}
 	
 	function doTitleChange(overrideTitle:String = '')
 	{
-		var title:String;
 		var formattedSong:String = Paths.formatToSongPath(SONG.song.toLowerCase()).trim();
+		var isVSCharSong = VSCharSongs.initialize().contains(formattedSong);
+		if (isVSCharSong)
+			DiscordClient.change_token("1274071752926036120"); // Change the token so it can refer to the CORRECT thing.
 		switch (formattedSong)
 		{
 			case 'triple-trouble':
-				title = Constants.VSCharTitles['tt_1'];
+				iconP4.visible = true;
+				iconP4.changeIcon('plexi');
 			case 'blubber':
-				title = Constants.VSCharTitles['silly'];
-			case 'high-ground':
-				title = Constants.VSCharTitles['high-ground'];
+				#if desktop
+				// Change the token for this song
+				DiscordClient.changePresence("Micheal's having a \"friendly\" chat with Char", SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
+				#end
 			case 'saloon-troubles':
-				title = Constants.VSCharTitles['saloon_1'];
 				iconP3.visible = true;
 				iconP3.changeIcon('sear');
 			case 'conflicting-views':
-				title = Constants.VSCharTitles['saloon_2'];
+				iconP3.visible = true;
+				iconP3.changeIcon('sear');
 			case 'ambush': 
-				title = Constants.VSCharTitles['saloon_3'];
 				iconP3.visible = true;
 				iconP4.visible = true;
 				iconP3.changeIcon('sear');
 				iconP4.changeIcon('cIgni');
-			case 'neighborhood-brawl':
-				title = Constants.VSCharTitles['bnnuy'];
-			default:
-				title = Constants.VSCharTitles['default'];
 		}
-		if (Constants.legacySongNames.contains(formattedSong))
-		{
-			title = Constants.VSCharTitles['legacy'];
-		}
-		var result:Dynamic = callOnLuas('doTitleChange', [], true, [FunkinLua.Function_Continue]);
-		if (Std.isOfType(result, String))
-		{
-			var title2 = Std.string(result);
-		}
-		trace(result);
-		openfl.Lib.application.window.title = title;
+		SongTitle.change_windowTitle(SONG);
 	}
 
 	var flashTween:FlxTween;
@@ -3238,6 +3246,7 @@ class PlayState extends MusicBeatState
 				iconP1.swapOldIcon();
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
+		currentStage.update(elapsed);
 
 		switch (curStage)
 		{
@@ -3462,22 +3471,11 @@ class PlayState extends MusicBeatState
 
 		var iconOffset:Int = 26;
 
-		iconP1.x = healthBar.x
-			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-			+ (150 * iconP1.scale.x - 150) / 2
-			- iconOffset;
-		iconP2.x = healthBar.x
-			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-			- (150 * iconP2.scale.x) / 2
-			+ iconOffset * 2;
-		iconP3.x = healthBar.x
-			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-			- (150 * iconP3.scale.x - 150) / 2
-			+ iconOffset * 1.5;
-		iconP4.x = healthBar.x
-			+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-			- (150 * iconP4.scale.x) / 2
-			- iconOffset * 4;
+
+		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
+		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
+		iconP3.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) + (150 * iconP3.scale.x - 150) / 2 - iconOffset * 1.5;
+		iconP4.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (150 * iconP4.scale.x) / 2 - iconOffset * 4;
 
 		if (health > 2)
 			health = 2;
@@ -3790,6 +3788,7 @@ class PlayState extends MusicBeatState
 		setOnLuas('cameraY', camFollowPos.y);
 		setOnLuas('botPlay', cpuControlled);
 		callOnLuas('onUpdatePost', [elapsed]);
+		currentStage.updatePost(elapsed);
 	}
 
 	function openPauseMenu()
@@ -3927,7 +3926,6 @@ class PlayState extends MusicBeatState
 		{
 			for (char in list)
 			{
-				trace('Adding $char to characterList');
 				if (type == 'bf')
 				{
 					if (!boyfriendMap.exists(char))
@@ -5724,7 +5722,7 @@ class PlayState extends MusicBeatState
 		}
 		FlxAnimationController.globalSpeed = 1;
 		FlxG.sound.music.pitch = 1;
-		openfl.Lib.application.window.title = Constants.VSCharTitles['default'];
+		openfl.Lib.application.window.title = VSCharTitles.get('default');
 		super.destroy();
 	}
 

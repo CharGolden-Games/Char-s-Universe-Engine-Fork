@@ -28,10 +28,57 @@ typedef StageFile = {
 	var camera_opponent:Array<Float>;
 	var camera_girlfriend:Array<Float>;
 	var camera_speed:Null<Float>;
+	@:optional var wasNull:Bool;
 }
 
 class StageData {
 	public static var forceNextDirectory:String = null;
+
+	public static final hardCodedStages:Map<String, StageFile> = [
+		'chartt' 				=> CharTT.stageData,
+		'saloon' 				=> Saloon.stageData,
+		'saloon-closeup' 		=> Saloon2.stageData,
+		'train' 				=> Train.stageData,
+		'igni-office' 			=> Office.stageData,
+		'char-house' 			=> CharsHouse.stageData,
+		'silly-stage'			=> SillyStage.stageData,
+		// Old Song Stages
+		'chartt-old' 			=> CharTT_Old.stageData,
+		'orangisland' 			=> OrangIsland.stageData,
+		'burntisland' 			=> BurntIsland.stageData,
+		'hellstadium' 			=> HellStadium.stageData,
+		'shenanigans-stage' 	=> Stage.stageData,
+		'mansion' 				=> Mansion.stageData
+	];
+
+	public static function dummy(?curStage:String):StageFile
+	{
+		if (curStage != null)
+		{
+			if (hardCodedStages.exists(curStage.toLowerCase()))
+			{
+				return hardCodedStages[curStage.toLowerCase()];
+			}
+		}
+		return {
+			directory: "",
+			defaultZoom: 0.9,
+			isPixelStage: false,
+			stageUI: "normal",
+
+			boyfriend: [770, 100],
+			girlfriend: [400, 130],
+			opponent: [100, 100],
+			hide_girlfriend: false,
+
+			camera_boyfriend: [0, 0],
+			camera_opponent: [0, 0],
+			camera_girlfriend: [0, 0],
+			camera_speed: 1,
+			wasNull: true
+		};
+	}
+
 	public static function loadDirectory(SONG:SwagSong) {
 		var stage:String = '';
 		if(SONG.stage != null) {
@@ -88,7 +135,7 @@ class StageData {
 		#end
 		else
 		{
-			return null;
+			return dummy(stage);
 		}
 		return cast Json.parse(rawJson);
 	}

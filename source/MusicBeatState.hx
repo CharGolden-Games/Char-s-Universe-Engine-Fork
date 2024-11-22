@@ -119,6 +119,7 @@ class MusicBeatState extends modchart.modcharting.ModchartMusicBeatState
 	}
 
 	public static function switchState(nextState:FlxState) {
+		Discord.DiscordClient.reset_token();
 		// Custom made Trans in
 		var curState:Dynamic = FlxG.state;
 		var leState:MusicBeatState = curState;

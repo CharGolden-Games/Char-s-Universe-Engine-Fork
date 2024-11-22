@@ -6,8 +6,8 @@ function onCreatePost()
         setProperty(v .. ".x", getProperty("boyfriend.x") - 500)
         setProperty(v .. ".y", getProperty("boyfriend.y"))
 
-        setProperty('iconP1.y', getProperty("healthBar.y") - 80)
-        setProperty('iconP2.y', getProperty("healthBar.y") - 80)
+        setProperty('iconP1.y', getProperty("healthBar.y") - 75)
+        setProperty('iconP2.y', getProperty("healthBar.y") - 75)
 
         setProperty('scoreTxt.x', getProperty("healthBar.x") - 340)
         setProperty('scoreTxt.y', getProperty("healthBar.y") + 60)

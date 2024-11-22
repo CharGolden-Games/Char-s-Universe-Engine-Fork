@@ -1,5 +1,6 @@
 package vschar_shit;
 
+import Song.SwagSong;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
@@ -75,4 +76,33 @@ using StringTools;
 			}});
 	}
 
+	public static function change_windowTitle(SONG:SwagSong)
+	{
+		var title:String;
+		var formattedSong:String = Paths.formatToSongPath(SONG.song.toLowerCase()).trim();
+		switch (formattedSong)
+		{
+			case 'triple-trouble':
+				title = VSCharTitles.get('tt_1');
+			case 'blubber':
+				title = VSCharTitles.get('silly');
+			case 'high-ground':
+				title = VSCharTitles.get('high-ground');
+			case 'saloon-troubles':
+				title = VSCharTitles.get('saloon_1');
+			case 'conflicting-views':
+				title = VSCharTitles.get('saloon_2');
+			case 'ambush': 
+				title = VSCharTitles.get('saloon_3');
+			case 'neighborhood-brawl':
+				title = VSCharTitles.get('bnnuy');
+			default:
+				title = VSCharTitles.get('default');
+		}
+		if (Constants.legacySongNames.contains(formattedSong))
+		{
+			title = VSCharTitles.get('legacy');
+		}
+		openfl.Lib.application.window.title = title;
+	}
 }

@@ -1,0 +1,121 @@
+{
+	"song": {
+		"events": [
+			[
+				0,
+				[
+					[
+						"Universal Triggers",
+						"0",
+						""
+					]
+				]
+			],
+			[
+				41095.8904109589,
+				[
+					[
+						"Universal Triggers",
+						"9",
+						""
+					]
+				]
+			],
+			[
+				41095.8904109589,
+				[
+					[
+						"Zoom Camera",
+						"0.55",
+						""
+					]
+				]
+			],
+			[
+				106849.315068493,
+				[
+					[
+						"Universal Triggers",
+						"1",
+						""
+					]
+				]
+			],
+			[
+				133150.684931507,
+				[
+					[
+						"Universal Triggers",
+						"2",
+						""
+					]
+				]
+			],
+			[
+				198904.109589041,
+				[
+					[
+						"Universal Triggers",
+						"3",
+						""
+					]
+				]
+			],
+			[
+				238767.123287672,
+				[
+					[
+						"Universal Triggers",
+						"4",
+						""
+					],
+					[
+						"Universal Triggers",
+						"10",
+						""
+					]
+				]
+			],
+			[
+				290958.904109589,
+				[
+					[
+						"Universal Triggers",
+						"11",
+						""
+					],
+					[
+						"Universal Triggers",
+						"5",
+						""
+					]
+				]
+			],
+			[
+				325657.699290312,
+				[
+					[
+						"Universal Triggers",
+						"6",
+						""
+					]
+				]
+			],
+			[
+				406621.554711998,
+				[
+					[
+						"Universal Triggers",
+						"76",
+						""
+					],
+					[
+						"Universal Triggers",
+						"10",
+						""
+					]
+				]
+			]
+		]
+	}
+}

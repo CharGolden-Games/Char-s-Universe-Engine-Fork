@@ -93,6 +93,7 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		Main.ignore_resizeEvent = true;
 		DiscordClient.changePresence("In the Intro", null);
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
@@ -644,6 +645,7 @@ class TitleState extends MusicBeatState
 				transitioning = true;
 				// FlxG.sound.music.stop();
 
+				Main.ignore_resizeEvent = false;
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
 					if (mustUpdate)

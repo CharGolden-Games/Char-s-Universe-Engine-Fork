@@ -13,11 +13,15 @@ using StringTools;
 class DiscordClient
 {
 	public static var isInitialized:Bool = false;
+	public static var default_ID:String = "1288919403362123827";
+	public static var new_ID:String;
+	public static var current_ID:String = "1288919403362123827";
+
 	public function new()
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "1288919403362123827",
+			clientID: current_ID,
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -69,7 +73,7 @@ class DiscordClient
 		isInitialized = true;
 	}
 
-	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
+	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp: Float, ?bigImageKey:String, ?bigImageText:String)
 	{
 		var startTimestamp:Float = if(hasStartTimestamp) Date.now().getTime() else 0;
 
@@ -78,11 +82,17 @@ class DiscordClient
 			endTimestamp = startTimestamp + endTimestamp;
 		}
 
+		if (bigImageKey == null)
+			bigImageKey = 'icon';
+
+		if (bigImageText == null)
+			bigImageText = 'Engine Version: ${MainMenuState.ueVersion}';
+
 		DiscordRpc.presence({
 			details: details,
 			state: state,
-			largeImageKey: 'icon',
-			largeImageText: "Engine Version: " + MainMenuState.ueVersion,
+			largeImageKey: bigImageKey,
+			largeImageText: bigImageText,
 			smallImageKey : smallImageKey,
 			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp : Std.int(startTimestamp / 1000),
@@ -92,10 +102,32 @@ class DiscordClient
 		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 
+	public static function reset_token()
+	{
+		current_ID = default_ID;
+		shutdown();
+		initialize();
+	}
+
+	public static function change_token(?newID:String)
+	{
+		if (newID == null)
+			new_ID = default_ID;
+		else
+			new_ID = newID;
+
+		current_ID = new_ID;
+		shutdown();
+		initialize();
+	}
+
 	#if LUA_ALLOWED
 	public static function addLuaCallbacks(lua:State) {
-		Lua_helper.add_callback(lua, "changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
-			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp);
+		Lua_helper.add_callback(lua, "changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float, ?bigImageKey:String, ?bigImageText:String) {
+			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp, bigImageKey, bigImageText);
+		});
+		Lua_helper.add_callback(lua, "changeRPCToken", function(?newID:String) {
+			change_token(newID);
 		});
 	}
 	#end

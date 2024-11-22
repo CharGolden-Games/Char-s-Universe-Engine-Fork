@@ -244,7 +244,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		super.create();
-		openfl.Lib.application.window.title = Constants.VSCharTitles['default'];
+		openfl.Lib.application.window.title = VSCharTitles.get('default');
 	}
 
 	#if ACHIEVEMENTS_ALLOWED

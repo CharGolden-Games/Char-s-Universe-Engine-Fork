@@ -17,16 +17,18 @@ function onUpdatePost(e)
 
         local usePer = (flip and percent or remap(percent, 0, 100, 100, 0)) * 0.01
         local part1 = getProperty('healthBar.x') + ((getProperty('healthBar.width')) * usePer)
-        local iconParts = {part1 + (150 * getProperty('iconP1.scale.x') - 150) / 2 - 26,
-                           part1 - (150 * getProperty('iconP2.scale.x')) / 2 - 26 * 2}
+        local iconParts = {0,
+                           0,
+                           part1 + (150 * getProperty('iconP1.scale.x') - 150) / 2 - 26 * 1.5,
+                           part1 - (150 * getProperty('iconP2.scale.x')) / 2 - 26 * 4}
 
-        for i = 1, 2 do
+        for i = 3, 4 do
             setProperty('iconP' .. i .. '.x', iconParts[flip and ((i % 2) + 1) or i])
             setProperty('iconP' .. i .. '.flipX', flip)
         end
     end
 
-    for i = 1, 2 do
+    for i = 3, 4 do
         setProperty('iconP' .. i .. '.flipX', flip)
     end
 end

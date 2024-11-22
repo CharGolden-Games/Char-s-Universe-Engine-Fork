@@ -68,13 +68,13 @@ class FunkinLua
 	public var camTarget:FlxCamera;
 	public var scriptName:String = '';
 	public var closed:Bool = false;
+	static var curTitles:VSCharTitles = new VSCharTitles();
 
 	#if hscript
 	public static var hscript:HScript = null;
 	#end
 
 	public static var ir = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('is'));
-
 	public function new(script:String)
 	{
 		#if LUA_ALLOWED
@@ -2133,6 +2133,8 @@ class FunkinLua
 			}
 			openfl.Lib.application.window.setIcon(lime.graphics.Image.fromFile(path));
 		});
+		Lua_helper.add_callback(lua, 'set_VSCharTitle', function(k:String, v:String) curTitles.set(k, v));
+		Lua_helper.add_callback(lua, 'get_VSCharTitle', function(Title:String) curTitles.get_customTitle(Title));
 		Lua_helper.add_callback(lua, "addAnimationByPrefix", function(obj:String, name:String, prefix:String, framerate:Int = 24, loop:Bool = true)
 		{
 			if (PlayState.instance.getLuaObject(obj, false) != null)

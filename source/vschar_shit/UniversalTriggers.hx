@@ -13,9 +13,9 @@ using StringTools;
  * This class handles the "Universal Triggers" event so it doesn't clutter PlayState.
  */
 class UniversalTriggers {
+    static var bf:Int = 0;
     static var dad:Int = 1;
     static var gf:Int = 2;
-    static var bf:Int = 0;
 
     static var ttChars_bf:Array<String> = [
         'char',
@@ -97,7 +97,7 @@ class UniversalTriggers {
         }
     }
 
-    public static function moveCharacters()
+    public static function moveCharacters_tt()
     {
         // Move them to their correct positions.
         PlayState.instance.boyfriend.x = dadPos[0];
@@ -125,23 +125,23 @@ class UniversalTriggers {
                     case 1:
                         PlayState.instance.doWhiteFlash();
                         changeCharacters('plexi-ttBehind', 'none', 'mFront');
-                        moveCharacters();
-                        IconManagement.set_IconP4('fchar', true);
+                        moveCharacters_tt();
+                        IconManagement.set_IconP4('zavi', true);
 
                     case 2:
                         // PlayState.instance.flipHealthbar = true;
                         IconManagement.hide_IconP4(true);
                         PlayState.instance.doWhiteFlash();
                         changeCharacters('char-tt', null, 'ctrevor-tt');
-                        moveCharacters();
+                        moveCharacters_tt();
 
                     case 3:
                         changeCharacters(null, null, 'ftrevor-tt');
-                        moveCharacters();
+                        moveCharacters_tt();
 
                     case 4:
                         changeCharacters('char-ttBehind', null, 'micheal-ttFront');
-                        moveCharacters();
+                        moveCharacters_tt();
                         IconManagement.set_IconP4('tt-duo', true);
 
                     case 5:
@@ -156,7 +156,7 @@ class UniversalTriggers {
                     case 7:
                         PlayState.instance.doWhiteFlash();
                         changeCharacters('char-ttBehindReverse', null, 'micheal-pissy-ttFront');
-                        IconManagement.set_IconP4('tripleTrouble'/**hah, hah! He said it!**/, true);
+                        IconManagement.set_IconP4('tripleTrouble'/**ah! ah! He said it!**/, true);
 
                     case 8:
                         IconManagement.hide_IconP4(true);
@@ -168,18 +168,18 @@ class UniversalTriggers {
                         changeCharacters(null, null, 'zavi-tt');
 
                     case 10:
-                        openfl.Lib.application.window.title = Constants.VSCharTitles['tt_2'];
+                        openfl.Lib.application.window.title = VSCharTitles.get('tt_2');
 
                     case 11:
-                        openfl.Lib.application.window.title = Constants.VSCharTitles['tt_3'];
+                        openfl.Lib.application.window.title = VSCharTitles.get('tt_3');
                 }
 
             case 'Triggers Rivulet':
                 switch (trigger)
                 {
                     case 0:
-                        SongTitle.doSongTitle(song, 'Gamesdarks12' /**Likely to change**/, 0xFF60DAFF, 0xFF0084FF, 'Rivulet');
-                        openfl.Lib.application.window.title = Constants.VSCharTitles['silly'];
+                        SongTitle.doSongTitle(song, 'Gamesdarks12', 0xFF60DAFF, 0xFF0084FF, 'Rivulet');
+                        openfl.Lib.application.window.title = VSCharTitles.get('silly');
                 }
         }
 
