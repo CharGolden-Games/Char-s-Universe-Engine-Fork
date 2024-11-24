@@ -70,6 +70,11 @@ class ClientPrefs
 	public static var ueresultscreen:Bool = true;
 	public static var uems:Bool = true;
 
+	/**
+	*														[0] Saloon Troubles | [1] Conflicting Views | [2] Ambush | [3] Origins
+	*/
+	public static var storyProgress_WildWest:Array<Bool> = [false, 			  false, 			 false,   false];
+
 	public static var noteSkin:String = 'Default';
 	public static var noteColorStyle:String = 'Normal';
 
@@ -218,6 +223,7 @@ class ClientPrefs
 		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.checkForUpdates = checkForUpdates;
 		FlxG.save.data.comboStacking = comboStacking;
+		FlxG.save.data.storyProgress_WildWest = storyProgress_WildWest;
 
 		FlxG.save.flush();
 
@@ -501,6 +507,10 @@ class ClientPrefs
 			{
 				gameplaySettings.set(name, value);
 			}
+		}
+		if (FlxG.save.data.storyProgress_WildWest != null)
+		{
+			storyProgress_WildWest = FlxG.save.data.storyProgress_WildWest;
 		}
 
 		// flixel automatically saves your volume!

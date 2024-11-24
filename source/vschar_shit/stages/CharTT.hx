@@ -8,7 +8,7 @@ class CharTT extends BaseStage {
 
         stageUI: "normal",
 
-        boyfriend: [2000, 100],
+        boyfriend: [1000, 100],
         girlfriend: [500, 100],
         opponent: [100, 100],
         hide_girlfriend: false,

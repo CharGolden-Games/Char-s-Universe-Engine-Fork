@@ -893,7 +893,19 @@ class PlayState extends MusicBeatState
 		switch (Paths.formatToSongPath(SONG.song))
 		{
 			case 'stress':
-				GameOverSubstate.characterName = 'bf-holding-gf-dead';
+				set_gameOverChar('bf-holding-gf-dead');
+				
+			case 'triple-trouble':
+				set_gameOverChar('plexi-dead');
+
+			case 'blubber':
+				set_gameOverChar('charBlubber-dead');
+
+			case 'saloon-troubles' | 'conflicting-views':
+				set_gameOverChar('anny-dead');
+
+			case 'ambush':
+				set_gameOverChar('anny_sear-dead');
 		}
 
 		if (isPixelStage)
@@ -1531,6 +1543,11 @@ class PlayState extends MusicBeatState
 			if (!Constants.forceWindowTitle.contains(Paths.formatToSongPath(SONG.song.toLowerCase()).trim()))
 				openfl.Lib.application.window.title = VSCharTitles.get('FIRE IN THE HOLE');
 		}
+	}
+
+	public function set_gameOverChar(char:String):Void
+	{
+		GameOverSubstate.characterName = char;
 	}
 	
 	function doTitleChange(overrideTitle:String = '')

@@ -245,6 +245,7 @@ class MainMenuState extends MusicBeatState
 
 		super.create();
 		openfl.Lib.application.window.title = VSCharTitles.get('default');
+		FunkinLua.changeIcon('appIcon/iconOG');
 	}
 
 	#if ACHIEVEMENTS_ALLOWED
@@ -356,7 +357,7 @@ class MainMenuState extends MusicBeatState
 									case 'story_mode':
 										MusicBeatState.switchState(new StoryMenuState());
 									case 'freeplay':
-										MusicBeatState.switchState(new FreeplayState());
+										MusicBeatState.switchState(new vschar_shit.states.VSCharFreeplayState());
 									#if MODS_ALLOWED
 									case 'mods':
 										MusicBeatState.switchState(new ModsMenuState());

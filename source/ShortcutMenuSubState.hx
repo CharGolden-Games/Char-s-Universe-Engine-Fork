@@ -158,7 +158,7 @@ class ShortcutMenuSubState extends MusicBeatSubstate
 						FlxG.switchState(new StoryMenuState());
 						inShortcutMenu = false;
 					case 'Freeplay':
-						FlxG.switchState(new FreeplayState());
+						FlxG.switchState(new vschar_shit.states.VSCharFreeplayState());
 						FlxG.sound.playMusic(Paths.music("freakyMenu-" + ClientPrefs.mmm));
 						inShortcutMenu = false;
 					case 'Back':

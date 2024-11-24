@@ -14,3 +14,5 @@ import vschar_shit.stages.LegacyStages.HellStadium;
 import vschar_shit.stages.LegacyStages.Mansion;
 import vschar_shit.stages.LegacyStages.OrangIsland;
 import vschar_shit.stages.LegacyStages.Stage;
+
+using StringTools;

@@ -1,0 +1,8 @@
+{
+	"name": "VS Char Legacy",
+	"description": "Old charts/ideas I decided to finish and make into an official modpack expansion!\n(WORKS BEST IN UNMODIFIED VS CHAR BUILD)",
+	"restart": true,
+	"runsGlobally": true,
+	"color": [170, 0, 255],
+	"iconFramerate": 10
+}

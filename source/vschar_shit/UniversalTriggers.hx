@@ -13,6 +13,20 @@ using StringTools;
  * This class handles the "Universal Triggers" event so it doesn't clutter PlayState.
  */
 class UniversalTriggers {
+    public static var game:PlayState;
+
+    public static function initialize()
+    {
+        game = PlayState.instance;
+        if (game == null)
+        {
+            trace('PLAYSTATE NULL??');
+            lime.app.Application.current.window.alert('PLAYSTATE IS NULL??', 'NULL ERROR?');
+            FlxG.switchState(new PlayState());
+            return;
+        }
+    }
+
     static var bf:Int = 0;
     static var dad:Int = 1;
     static var gf:Int = 2;
@@ -134,6 +148,7 @@ class UniversalTriggers {
                         PlayState.instance.doWhiteFlash();
                         changeCharacters('char-tt', null, 'ctrevor-tt');
                         moveCharacters_tt();
+                        game.set_gameOverChar('char-tt-dead');
 
                     case 3:
                         changeCharacters(null, null, 'ftrevor-tt');
