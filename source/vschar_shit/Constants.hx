@@ -38,9 +38,9 @@ class Constants
         'defeat-char-mix',
         'high-ground-old',
         'free-movies-free',
-        '3-problems',
         'not-fast',
         'you-can-walk',
+        '3-problems',
         'vesania',
         'shenanigans-old'
     ];
@@ -60,13 +60,13 @@ class Constants
             ['char'],
             ['sear', 'igni', 'cIgni', 'igni'],
             ['char-cool', 'zavi-p-static', 'trevor-d', 'charsus', 'plexi-silly', 'char-smug'],
-            ['charsus-crappy', 'trevor-d-crappy', 'zavi-n', 'zavi-old', 'cChar-old', 'fChar', 'char-retro', 'plexi-old']
+            ['charsus-crappy', 'trevor-d-crappy', 'zavi-n', 'cChar-old', 'fChar', 'zavi-old', 'char-retro', 'plexi-old']
         ],
         colors: [
             [0xFFFF8800],
             [0xFFFF88FF, 0xFF4F4469, 0xFF7F749B, 0xFF4F4469],
             [0xFFFFAA00, 0xFFFFAA66, 0xFF8800AA, 0xFFFFAA00, 0xFFC76A00, 0xFFFF8800],
-            [0xFFC76A00, 0xFF8800AA, 0xFFFFAA66, 0xFFFFAA66, 0xFFFF8800, 0xFFC76A00, 0xFFC76A00, 0xFFC52B66]
+            [0xFFC76A00, 0xFF8800AA, 0xFFFFAA66, 0xFFFF8800, 0xFFC76A00, 0xFFFFAA66, 0xFFC76A00, 0xFFC52B66]
         ],
         difficulties: [
             ['hard'],

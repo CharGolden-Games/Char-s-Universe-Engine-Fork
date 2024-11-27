@@ -119,18 +119,19 @@ class VSCharFreeplayState extends MusicBeatState
             curGraphic = Paths.image('freeplay/${songs[curSelected]}');
         }
 
-        songArt = new SongArt(0, 0, 700, 700).changeArt(curGraphic);
+        songArt = new SongArt(0, 0, 600, 600).changeArt(curGraphic);
         songArt.screenCenter();
+        songArt.y += 50;
         songArt.cameras = [camSong];
         add(songArt);
 
-        curSongText = new FlxText(0, 30, FlxG.width, songs[curSelected], 60);
+        curSongText = new FlxText(0, 15, FlxG.width, songs[curSelected], 60);
         curSongText.setFormat(Paths.font('funkin.ttf'), 60, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
         curSongText.borderSize = 4;
         curSongText.cameras = [camSong];
         add(curSongText);
 
-        leftArrow = new FlxSprite(0, 30);
+        leftArrow = new FlxSprite(0, 10);
         leftArrow.frames = Paths.getSparrowAtlas('campaign_menu_UI_assets');
         leftArrow.animation.addByPrefix('idle', "arrow left");
         leftArrow.animation.addByPrefix('press', "arrow push left");
@@ -139,7 +140,7 @@ class VSCharFreeplayState extends MusicBeatState
         leftArrow.cameras = [camSong];
         add(leftArrow);
 
-        rightArrow = new FlxSprite(0, 30);
+        rightArrow = new FlxSprite(0, 10);
         rightArrow.frames = Paths.getSparrowAtlas('campaign_menu_UI_assets');
         rightArrow.animation.addByPrefix('idle', 'arrow right');
         rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
@@ -303,7 +304,16 @@ class VSCharFreeplayState extends MusicBeatState
         curSong = songs[curSelected];
         songIcon.changeIcon(icons[curSelected]);
         bgTween = FlxTween.color(bg, 1, bg.color, colors[curSelected]);
-        songArt.changeArt(Paths.image(songs[curSelected]));
+
+        if (Paths.image('freeplay/${songs[curSelected]}') == null)
+        {
+            curGraphic = Paths.image('freeplay/fallback');
+        }
+        else
+        {
+            curGraphic = Paths.image('freeplay/${songs[curSelected]}');
+        }
+        songArt.changeArt(curGraphic);
         leftArrow.screenCenter(X);
         rightArrow.screenCenter(X);
         var displayDifficulty:String = songDifficulty;

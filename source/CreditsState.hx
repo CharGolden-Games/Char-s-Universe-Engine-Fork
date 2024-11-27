@@ -123,6 +123,15 @@ class CreditsState extends MusicBeatState
 				'BE9877'
 			],
 			[''],
+			['VS Char Team'],
+			[
+				'Char', 
+				'char', 
+				'Did practically the whole mod.', 
+				'https://bsky.app/profile/chargoldenyt.bsky.social', 
+				'FF8800'
+			],
+			[''],
 			['Stuff used by Universe'],
 			['Edwhak', 'Edwhak', 'Modchart Tool', 'https://www.youtube.com/@EDWHAK', '00FF00'],
 			[
