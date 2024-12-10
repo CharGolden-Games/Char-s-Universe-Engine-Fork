@@ -71,7 +71,10 @@ class ChartingState extends MusicBeatState
 	var undos = [];
 	var redos = [];
 	var eventStuff:Array<Dynamic> = [
-		['', "Nothing. Yep, that's right."],
+		[
+			'', 
+			"Nothing. Yep, that's right."
+		],
 		[
 			'Dadbattle Spotlight',
 			"Used in Dad Battle,\nValue 1: 0/1 = ON/OFF,\n2 = Target Dad\n3 = Target BF"
@@ -88,13 +91,22 @@ class ChartingState extends MusicBeatState
 			'Philly Glow',
 			"Exclusive to Week 3\nValue 1: 0/1/2 = OFF/ON/Reset Gradient\n \nNo, i won't add it to other weeks."
 		],
-		['Kill Henchmen', "For Mom's songs, don't use this please, i love them :("],
+		[
+			'Kill Henchmen', 
+			"For Mom's songs, don't use this please, i love them :("
+		],
 		[
 			'Add Camera Zoom',
 			"Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."
 		],
-		['BG Freaks Expression', "Should be used only in \"school\" Stage!"],
-		['Trigger BG Ghouls', "Should be used only in \"schoolEvil\" Stage!"],
+		[
+			'BG Freaks Expression', 
+			"Should be used only in \"school\" Stage!"
+		],
+		[
+			'Trigger BG Ghouls', 
+			"Should be used only in \"schoolEvil\" Stage!"
+		],
 		[
 			'Play Animation',
 			"Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\nValue 1: Animation to play.\nValue 2: Character (Dad, BF, GF)"
@@ -119,8 +131,26 @@ class ChartingState extends MusicBeatState
 			'Change Scroll Speed',
 			"Value 1: Scroll Speed Multiplier (1 is default)\nValue 2: Time it takes to change fully in seconds."
 		],
-		['Set Property', "Value 1: Variable name\nValue 2: New value"],
-		['Universal Triggers', 'This does some hardcoded stuff (But can also be used for some softcoded stuff.)\nValue 1: The trigger to check\nValue 2: If a trigger has extra params, put em here!']
+		[
+			'Set Property', 
+			"Value 1: Variable name\nValue 2: New value"
+		],
+		[
+			'Universal Triggers', 
+			'This does some hardcoded stuff (But can also be used for some softcoded stuff.)\nValue 1: The trigger to check\nValue 2: If a trigger has extra params, put em here!'
+		],
+		[
+			'Change Rotation Bop',
+			'Changes how the rotation bop works!\nValue 1: The frequency (in beats) to bop.\nValue 2: HOW HARD YOU BOPPIN? (Max 2x the rotation)'
+		],
+		[
+			'Change Rot Bop Intensity',
+			'Changes the intensity of the Rotation Bop.\nValue 1: HOW HARD YOU BOPPIN? (Max 2x the rotation)'
+		],
+		[
+			'Change Rot Bop Frequency',
+			'Changes how many beats before the next bop.\nValue 1: The frequency (in beats) to bop.'
+		]
 	];
 
 	var _file:FileReference;

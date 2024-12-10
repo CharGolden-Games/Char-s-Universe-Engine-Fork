@@ -7,6 +7,36 @@ import flixel.graphics.FlxGraphic;
 import Controls;
 import flixel.util.FlxColor;
 
+
+class VSCharSaveData
+{
+	/**
+	*												[0] Saloon Troubles | [1] Conflicting Views | [2] Ambush | [3] Origins
+	*/
+	public var storyProgress_WildWest:Array<Bool> = [false, 			  false, 			 	  false,        false];
+
+	/**
+	 * Whether you've played the game that is also in development as I make this mod
+	 */
+	public var hasPlayed_CharsAdventure:Bool = false;
+
+	/**
+	 * 								   [0] the-test | [1] welcome-to-the-game | [2] welcome-to-the-madness
+	 */
+	public var the_test:Array<Bool> = [false,         false,                    false];
+
+	/**
+	 * TODO: Make more catagories maybe lmao
+	 * 										[0] Bonus | [1] Secret
+	 */
+	public var cats_unlocked:Array<Bool> = [false,      false];
+
+	public var hasFinished_EndGame:Bool = false;
+	public var hasSeenIntro:Bool = false;
+
+	public function new() {}
+}
+
 class ClientPrefs
 {
 	public static var downScroll:Bool = false;
@@ -70,10 +100,7 @@ class ClientPrefs
 	public static var ueresultscreen:Bool = true;
 	public static var uems:Bool = true;
 
-	/**
-	*														[0] Saloon Troubles | [1] Conflicting Views | [2] Ambush | [3] Origins
-	*/
-	public static var storyProgress_WildWest:Array<Bool> = [false, 			  false, 			 false,   false];
+	public static var saveData_VSChar:VSCharSaveData;
 
 	public static var noteSkin:String = 'Default';
 	public static var noteColorStyle:String = 'Normal';
@@ -223,7 +250,9 @@ class ClientPrefs
 		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.checkForUpdates = checkForUpdates;
 		FlxG.save.data.comboStacking = comboStacking;
-		FlxG.save.data.storyProgress_WildWest = storyProgress_WildWest;
+		
+		for (key in Reflect.fields(saveData_VSChar))
+			Reflect.setField(FlxG.save.data, key, Reflect.field(saveData_VSChar, key));
 
 		FlxG.save.flush();
 
@@ -236,6 +265,9 @@ class ClientPrefs
 
 	public static function loadPrefs()
 	{
+		if (saveData_VSChar == null)
+			saveData_VSChar = new VSCharSaveData();
+
 		// UE
 		if (FlxG.save.data.keystrokes != null)
 		{
@@ -508,10 +540,9 @@ class ClientPrefs
 				gameplaySettings.set(name, value);
 			}
 		}
-		if (FlxG.save.data.storyProgress_WildWest != null)
-		{
-			storyProgress_WildWest = FlxG.save.data.storyProgress_WildWest;
-		}
+		for (key in Reflect.fields(saveData_VSChar))
+			if (Reflect.hasField(FlxG.save.data, key))
+				Reflect.setField(saveData_VSChar, key, Reflect.field(FlxG.save.data, key));
 
 		// flixel automatically saves your volume!
 		if (FlxG.save.data.volume != null)

@@ -25,6 +25,33 @@ class CoolUtil
 
 	public static var difficulties:Array<String> = [];
 
+	/**
+	 * Checks if the index given is out of bounds of a given array, also more of a generic error checker anyway
+	 * @param array The array to check
+	 * @param index The index to check with
+	 * @return Bool
+	 */
+	public static function isOOB_array(array:Array<Any>, index:Int):Bool
+	{
+		if (index > array.length - 1)
+		{
+			return true;
+		}
+
+		try {
+			array[index];
+		}
+		catch (e:Any)
+		{
+			// final failsafe!
+			trace('There was an error processing the array with the index $index, likely out of bounds! `$e`');
+			return true;
+		}
+
+		// Nothing tripped! Yay!
+		return false;
+	}
+
 	public static function updateTheEngine():Void
 	{
 		// Get the directory of the executable

@@ -2122,6 +2122,8 @@ class FunkinLua
 			openfl.Lib.application.window.title = title;
 		});
 		Lua_helper.add_callback(lua, 'changeWindowIcon', function(icon:String) changeIcon(icon));
+		Lua_helper.add_callback(lua, 'changeRotBopFrequency', function(frequency:Int = 4) PlayState.instance.customBop.frequency = frequency);
+		Lua_helper.add_callback(lua, 'changeRotBopIntensity', function(intensity:Float = 1) PlayState.instance.customBop.intensity = intensity);
 		Lua_helper.add_callback(lua, 'set_VSCharTitle', function(k:String, v:String) curTitles.set(k, v));
 		Lua_helper.add_callback(lua, 'get_VSCharTitle', function(Title:String) curTitles.get_customTitle(Title));
 		Lua_helper.add_callback(lua, "addAnimationByPrefix", function(obj:String, name:String, prefix:String, framerate:Int = 24, loop:Bool = true)

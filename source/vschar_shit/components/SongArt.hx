@@ -18,7 +18,7 @@ class SongArt extends FlxTypedSpriteGroup<FlxSprite>
      */
     public static var doAntialiasing:Bool = true;
 
-    function set_songArt(?graphic:FlxGraphic):FlxGraphic
+    function set_songArt(graphic:Null<FlxGraphic> = null):FlxGraphic
     {
         if (graphic == null)
         {
@@ -55,7 +55,7 @@ class SongArt extends FlxTypedSpriteGroup<FlxSprite>
      * @param graphic The sprite to use.
      * @return SongArt
      */
-    public function changeArt(?graphic:FlxGraphic):SongArt
+    public function changeArt(graphic:Null<FlxGraphic> = null):SongArt
     {
         set_songArt(graphic);
         return this;

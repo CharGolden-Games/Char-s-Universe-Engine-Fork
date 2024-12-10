@@ -1,5 +1,7 @@
 package vschar_shit;
 
+import vschar_shit.states.StatesConstants;
+import Discord.DiscordClient;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;

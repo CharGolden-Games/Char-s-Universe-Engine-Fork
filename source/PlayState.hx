@@ -81,6 +81,7 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
+	public var customBop:vschar_shit.CustomBop;
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
@@ -427,6 +428,8 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+
+		customBop = new vschar_shit.CustomBop();
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
@@ -3806,6 +3809,7 @@ class PlayState extends MusicBeatState
 		setOnLuas('botPlay', cpuControlled);
 		callOnLuas('onUpdatePost', [elapsed]);
 		currentStage.updatePost(elapsed);
+		customBop.onUpdate(elapsed);
 	}
 
 	function openPauseMenu()
@@ -3969,11 +3973,39 @@ class PlayState extends MusicBeatState
 
 	public function triggerEventNote(eventName:String, value1:String, value2:String)
 	{
+		var flValue1:Null<Float> = Std.parseFloat(value1);
+		var flValue2:Null<Float> = Std.parseFloat(value2);
+		if (Math.isNaN(flValue1))
+			flValue1 = null;
+		if (Math.isNaN(flValue2))
+			flValue2 = null;
+
 		switch (eventName)
 		{
+			case 'Chaneg Rotation Bop':
+				if (flValue1 != null)
+					customBop.frequency = Math.round(flValue1); // Just round it.
+				else
+					trace('Value 1 is not valid!!');
+				if (flValue2 != null)
+					customBop.intensity = flValue2;
+				else
+					trace('Value 2 is not valid!!');
+
+			case 'Change Rot Bop Intensity':
+				if (flValue1 != null)
+					customBop.intensity = flValue1;
+				else
+					trace('Value 1 is not valid!!');
+
+			case 'Change Rot Bop Frequency':
+				if (flValue1 != null)
+					customBop.frequency = Math.round(flValue1); // Just round it.
+				else
+					trace('Value 1 is not valid!!');
+			
 			case 'Universal Triggers':
-				var flValue1:Null<Float> = Std.parseFloat(value1);
-				if (!Math.isNaN(flValue1))
+				if (flValue1 != null)
 					UniversalTriggers.universalTriggers(SONG.song, flValue1, value2);
 				else
 					trace('value1 is invalid!');
@@ -5888,6 +5920,42 @@ class PlayState extends MusicBeatState
 
 		setOnLuas('curBeat', curBeat); // DAWGG?????
 		callOnLuas('onBeatHit', []);
+		if (SONG.song.toLowerCase().trim() == 'milf')
+		{
+			if (curBeat < 327)
+			{
+				if (curBeat >= 7)
+				{
+					if (customBop.frequency != 1)
+					{
+						customBop.frequency = 1;
+					}
+				}
+			}
+			else
+			{
+				if (customBop.frequency != 2)
+				{
+					customBop.frequency = 2;
+				}
+				if (customBop.intensity != 2)
+				{
+					customBop.intensity = 2;
+				}
+			}
+		}
+
+		// To account for potential lag, determine whether it's flipped based on the beat it lands on.
+		if (curBeat % customBop.frequency == 0)
+		{
+			customBop.flipped = false;
+			customBop.doCamBop();
+		}
+		if (curBeat % (customBop.frequency * 2) == 0)
+		{
+			customBop.flipped = true;
+			customBop.doCamBop();
+		}
 	}
 
 	override function sectionHit()

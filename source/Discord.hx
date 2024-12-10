@@ -13,8 +13,11 @@ using StringTools;
 class DiscordClient
 {
 	public static var isInitialized:Bool = false;
+	/**
+	 * This is the actual default ID, as it cannot be modified. default_ID is for changing how the discord token is reset.
+	 */
+	public static final _defaultID:String = "1288919403362123827";
 	public static var default_ID:String = "1288919403362123827";
-	public static var new_ID:String;
 	public static var current_ID:String = "1288919403362123827";
 
 	public function new()
@@ -38,12 +41,12 @@ class DiscordClient
 		DiscordRpc.shutdown();
 	}
 	
-	public static function shutdown()
+	public static function shutdown():Void
 	{
 		DiscordRpc.shutdown();
 	}
 	
-	static function onReady()
+	static function onReady():Void
 	{
 		DiscordRpc.presence({
 			details: "In the Intro",
@@ -53,17 +56,17 @@ class DiscordClient
 		});
 	}
 
-	static function onError(_code:Int, _message:String)
+	static function onError(_code:Int, _message:String):Void
 	{
 		trace('Error! $_code : $_message');
 	}
 
-	static function onDisconnected(_code:Int, _message:String)
+	static function onDisconnected(_code:Int, _message:String):Void
 	{
 		trace('Disconnected! $_code : $_message');
 	}
 
-	public static function initialize()
+	public static function initialize():Void
 	{
 		var DiscordDaemon = sys.thread.Thread.create(() ->
 		{
@@ -73,7 +76,7 @@ class DiscordClient
 		isInitialized = true;
 	}
 
-	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp: Float, ?bigImageKey:String, ?bigImageText:String)
+	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp: Float, ?bigImageKey:String, ?bigImageText:String):Void
 	{
 		var startTimestamp:Float = if(hasStartTimestamp) Date.now().getTime() else 0;
 
@@ -102,28 +105,42 @@ class DiscordClient
 		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 
-	public static function reset_token()
+	/**
+	 * Resets the RPC token to the current default
+	 * @param trueReset Whether to use the ACTUAL default ID.
+	 */
+	public static function reset_token(trueReset:Bool = false):Void
 	{
-		current_ID = default_ID;
-		shutdown();
-		initialize();
+		if (trueReset)
+			default_ID = _defaultID;
+		change_token(default_ID);
 	}
 
-	public static function change_token(?newID:String)
+	/**
+	 * Changes the discord Token
+	 * @param newID The new token to use for RPC
+	 * @param change_default Whether future Token resets should reflect this.
+	 */
+	public static function change_token(?newID:String, change_default:Bool = false):Void
 	{
 		if (newID == null)
-			new_ID = default_ID;
-		else
-			new_ID = newID;
-
-		current_ID = new_ID;
+		{
+			newID = default_ID;
+		}
+		current_ID = newID;
+		if (change_default)
+		{
+			default_ID = newID;
+		}
 		shutdown();
 		initialize();
 	}
 
 	#if LUA_ALLOWED
-	public static function addLuaCallbacks(lua:State) {
-		Lua_helper.add_callback(lua, "changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float, ?bigImageKey:String, ?bigImageText:String) {
+	public static function addLuaCallbacks(lua:State):Void
+	{
+		Lua_helper.add_callback(lua, "changePresence",
+		function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float, ?bigImageKey:String, ?bigImageText:String) {
 			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp, bigImageKey, bigImageText);
 		});
 		Lua_helper.add_callback(lua, "changeRPCToken", function(?newID:String) {
