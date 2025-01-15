@@ -1,0 +1,40 @@
+{
+    "songName": "Starman Slaughter: Char Mix (Preview)",
+    "credits": {
+        "ogComposer": "Sandi",
+        "composer": "Char",
+        "chart": "Char",
+        "sprites": "Char",
+        "coding": "Char"
+    },
+    "references": [
+        {
+            "name": "Starman Slaughter: Phase 1",
+            "references": [
+                "Horror Mario (Starman Slaughter)",
+                "Old Char Concept: Scared Lil' Shit."
+            ]
+        },
+        {
+            "name": "Starman Slaughter: Phase 2",
+            "references":[
+                "Horror Peach (idk the actual name)",
+                "Yoshi.exe (I think | Starman Slaughter)",
+
+                "Majin Sonic (VS Sonic.exe)",
+                "Sonic.exe (VS Sonic.exe)",
+                "Lord X (VS Sonic.exe)",
+
+                "Megadrive Soundfont (Woe Megadrive Soundfont be upon ye!)"
+            ]
+        },
+        {
+            "name": "Starman Slaughter: Phase 3",
+            "references": [
+                "Horror Mario (Starman Slaughter Phase 3)",
+                "Boyfriend (Mario's Madness | Starman Slaughter)",
+                "Old Micheal/Igni concepts"
+            ]
+        }
+    ]
+}

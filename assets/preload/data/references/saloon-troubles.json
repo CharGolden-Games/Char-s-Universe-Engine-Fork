@@ -1,0 +1,19 @@
+{
+    "songName": "Saloon Troubles",
+    "credits": {
+        "composer": "Char",
+        "chart": "Char",
+        "coding": "Char",
+        "art": "Char"
+    },
+    "references": [
+        {
+            "name": "General Spritework",
+            "references": [
+                "Western Films",
+                "Cartoonish Train Conducter's Hat",
+                "Stereotypically Western Music."
+            ]
+        }
+    ]
+}
