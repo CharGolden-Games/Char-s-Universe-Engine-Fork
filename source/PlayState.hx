@@ -65,6 +65,7 @@ import modchart.modcharting.ModchartFuncs;
 import modchart.modcharting.NoteMovement;
 import modchart.modcharting.PlayfieldRenderer;
 import modchart.modcharting.ModchartEditorState;
+import vschar.backend.UEScript;
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
@@ -359,6 +360,8 @@ class PlayState extends MusicBeatState
 
 	public static var playerIsCheating:Bool = false;
 
+	public static var scripter:UEScript;
+
 	override public function create()
 	{
 		// trace('Playback Rate: ' + playbackRate);
@@ -367,6 +370,8 @@ class PlayState extends MusicBeatState
 
 		// for lua
 		instance = this;
+
+		scripter = new UEScript();
 
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
@@ -927,6 +932,8 @@ class PlayState extends MusicBeatState
 		add(luaDebugGroup);
 		#end
 
+
+		scripter.initialize();
 		// "GLOBAL" SCRIPTS
 		#if LUA_ALLOWED
 		var filesPushed:Array<String> = [];
@@ -1468,6 +1475,7 @@ class PlayState extends MusicBeatState
 		}
 		ModchartFuncs.loadLuaFunctions();
 		callOnLuas('onCreatePost', []);
+		scripter.onCreatePost();
 
 		super.create();
 
@@ -1611,7 +1619,7 @@ class PlayState extends MusicBeatState
 		}
 		playbackRate = value;
 		FlxAnimationController.globalSpeed = value;
-		trace('Anim speed: ' + FlxAnimationController.globalSpeed);
+		//trace('Anim speed: ' + FlxAnimationController.globalSpeed);
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000 * value;
 		setOnLuas('playbackRate', playbackRate);
 		return value;
@@ -2509,7 +2517,7 @@ class PlayState extends MusicBeatState
 			+ ratingName
 			+ (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
 
-		if (ClientPrefs.scoreZoom && !miss && !cpuControlled && ClientPrefs.gameplaySettings.get('modchart'))
+		if (ClientPrefs.scoreZoom && !miss && !cpuControlled)
 		{
 			if (scoreTxtTween != null)
 			{
@@ -2611,6 +2619,7 @@ class PlayState extends MusicBeatState
 		#end
 		setOnLuas('songLength', songLength);
 		callOnLuas('onSongStart', []);
+		scripter.onSongStart();
 	}
 
 	var debugNum:Int = 0;
@@ -3136,6 +3145,7 @@ class PlayState extends MusicBeatState
 				iconP1.swapOldIcon();
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
+		scripter.onUpdate(elapsed);
 
 		switch (curStage)
 		{
@@ -3662,6 +3672,7 @@ class PlayState extends MusicBeatState
 		setOnLuas('cameraY', camFollowPos.y);
 		setOnLuas('botPlay', cpuControlled);
 		callOnLuas('onUpdatePost', [elapsed]);
+		scripter.onUpdatePost(elapsed);
 	}
 
 	function openPauseMenu()
@@ -4231,6 +4242,7 @@ class PlayState extends MusicBeatState
 				}
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
+		scripter.onEvent(eventName, value1, value2);
 	}
 
 	function moveCameraSection():Void
@@ -4613,7 +4625,7 @@ class PlayState extends MusicBeatState
 				spawnNoteSplashOnNote(note);
 		}*/
 
-		if (!practiceMode && !cpuControlled && ClientPrefs.gameplaySettings.get('modchart'))
+		if (!practiceMode && !cpuControlled)
 		{
 			songScore += score;
 			if (!note.ratingDisabled)
@@ -5175,6 +5187,12 @@ class PlayState extends MusicBeatState
 			note.noteType,
 			note.isSustainNote
 		]);
+		scripter.opponentNoteHit(
+			notes.members.indexOf(note),
+			Math.abs(note.noteData),
+			note.noteType,
+			note.isSustainNote
+		);
 
 		if (!note.isSustainNote)
 		{
@@ -5296,6 +5314,7 @@ class PlayState extends MusicBeatState
 			var leData:Int = Math.round(Math.abs(note.noteData));
 			var leType:String = note.noteType;
 			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
+			scripter.goodNoteHit(notes.members.indexOf(note), leData, leType, isSus);
 
 			if (!note.isSustainNote)
 			{
@@ -5538,6 +5557,7 @@ class PlayState extends MusicBeatState
 		for (lua in luaArray)
 		{
 			lua.call('onDestroy', []);
+			scripter.onDestroy();
 			lua.stop();
 		}
 		luaArray = [];

@@ -64,6 +64,7 @@ class FPS extends TextField
 		#end
 	}
 
+	var maxMemory:Float = 0;
 	// Event Handlers
 	@:noCompletion
 	private #if !flash override #end function __enterFrame(deltaTime:Float):Void
@@ -82,12 +83,14 @@ class FPS extends TextField
 
 		if (currentCount != cacheCount /*&& visible*/)
 		{
-			text = "FPS: " + currentFPS;
+			text = "Framerate: " + currentFPS;
 			var memoryMegas:Float = 0;
 			
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-			text += " - Memory: " + memoryMegas + " MB";
-			text += " - SPF: " + Math.floor((1/currentFPS)*100)/100 + " MS";
+			if (memoryMegas > maxMemory)
+				maxMemory = memoryMegas;
+			text += "\nMemory: " + memoryMegas + " MB / " + maxMemory + " MB";
+			text += "\nSPF: " + Math.floor((1/currentFPS)*100)/100 + " MS";
 
 			textColor = 0xFFFFFFFF;
 			if (memoryMegas > 3000 || currentFPS <= ClientPrefs.framerate / 2)

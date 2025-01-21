@@ -3388,6 +3388,10 @@ class FunkinLua
 			#end
 			return list;
 		});
+		Lua_helper.add_callback(lua, "changeDiffLevel", function(lvl:Float)
+			{
+				vschar.backend.uescripts.Force.DifficultyLVL.diffNumText = '$lvl';
+			});
 
 		call('onCreate', []);
 		#end

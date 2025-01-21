@@ -30,8 +30,10 @@ class CoolMenuState extends MusicBeatState
 	var bg:FlxSprite;
 	var dots:FlxBackdrop;
 
-	public static var ueVersion:String = '0.5.5';
-	public static var psychEngineVersion:String = '0.6.3';
+	public static var ueVersion:String = MainMenuState.ueVersion;
+	public static var psychEngineVersion:String = MainMenuState.psychEngineVersion; // This is also used for Discord RPC
+	public static var vsCharVersion:String = MainMenuState.vsCharVersion;
+	public static var charEngineVersion:String = MainMenuState.charEngineVersion;
 
 	var curSelected:Int = 0;
 	var menuItems:FlxTypedGroup<MenuText>;
@@ -166,16 +168,16 @@ class CoolMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<MenuText>();
 		add(menuItems);
 
-		var targetX:Float = FlxG.width / 2 + 300;
+		var targetX:Float = FlxG.width / 2 + 100;
 
-		versionShitUE = new FlxText(FlxG.width + 2000, FlxG.height - 92, 0, "Universe Engine v: " + ueVersion, 12);
+		versionShitUE = new FlxText(FlxG.width + 2000, FlxG.height - 92, 0, 'Universe Engine v: $ueVersion | Psych Engine v $psychEngineVersion', 12);
 		versionShitUE.scrollFactor.set();
 		versionShitUE.setFormat(Paths.font('funkin.ttf'), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShitUE);
 		FlxTween.tween(versionShitUE, {x: targetX}, 2, {
 			ease: FlxEase.backOut
 		});
-		versionShitPE = new FlxText(FlxG.width + 2000, FlxG.height - 72, 0, "Psych Engine v: " + psychEngineVersion, 12);
+		versionShitPE = new FlxText(FlxG.width + 2000, FlxG.height - 72, 0, 'VS Char v: $vsCharVersion | Char Engine v: $charEngineVersion', 12);
 		versionShitPE.scrollFactor.set();
 		versionShitPE.setFormat(Paths.font('funkin.ttf'), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShitPE);
